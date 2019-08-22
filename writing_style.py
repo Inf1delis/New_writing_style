@@ -22,10 +22,14 @@ enter = Key.enter
 ctrl = Key.ctrl if WINDOWS_MODE else Key.cmd_l
 space = Key.space
 delete = Key.delete
-symbols = ',.:;<=>?@[]^-_`{"|"}§±'
-symbols += ''.join([chr(i) for i in range(20, 41)])
-vk_smiles = ['&#128127;', '&#128163;', '&#128552;', '&#128158;', '&#128539;', '&#128528;', '&#128580;', '&#128545;',
-             '&#128169;', '&#128526;', '&#128517;', '&#128527;', '&#128520;', '&#128514;', '&#128133;']
+symbols = ''.join([chr(i) for i in range(33, 65)])
+symbols += ''.join([chr(i) for i in range(91, 97)])
+symbols += ''.join([chr(i) for i in range(123, 127)])
+
+vk_smiles = ['&#128127;', '&#128163;', '&#128552;', '&#128158;',
+             '&#128539;', '&#128528;', '&#128580;', '&#128545;',
+             '&#128169;', '&#128526;', '&#128517;', '&#128527;',
+             '&#128520;', '&#128514;', '&#128133;']
 # здесь можно конечно пробежаться в цикле for in range, но не все смайлы крутые
 clear = lambda: os('cls' if WINDOWS_MODE else 'clear')
 # WARNING !!!!!!!
@@ -45,6 +49,7 @@ def dawn_mode(key):
     global mode
     mode = not mode
     if key[1] not in symbols:
+        print(key[1])
         return key[1].upper() if mode else key[1].lower()
     else:
         return key[1]
@@ -52,7 +57,7 @@ def dawn_mode(key):
 
 def algorithm():
     global word_buf
-    word_string = ''.join([str(ch) for ch in word_buf])
+    word_string = ''.join([ch for ch in word_buf])
     # копируем наше слово в буфер обмена
     xerox.copy(word_string)
 
@@ -91,8 +96,7 @@ def on_press(key):
 
 
 def on_release(key):
-    if exit or len(word_buf) != 0 and \
-             (key == space or key == enter):
+    if exit or key == space:
         return False
 
 
@@ -103,7 +107,7 @@ while True:
         listener.join()     # мониторинг клавиатуры
         del listener
 
-    if exit == True:
+    if exit:
         sys.exit()
     algorithm()
     collect()       # зовет сборщик мусора
