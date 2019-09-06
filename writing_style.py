@@ -2,7 +2,6 @@ from os import system as os
 import sys
 import xerox
 import pynput
-import random
 from gc import collect
 from platform import system
 
